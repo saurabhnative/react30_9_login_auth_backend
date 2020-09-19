@@ -2,6 +2,8 @@ const router = require('express').Router();
 const User = require('../model/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const verify = require('./verifyToken')
+
 const { registerValidation, loginValidation } = require('../validation');
 
 // Registration Routes
@@ -54,5 +56,15 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET)
     res.header('auth-token', token).send({"token":token});
 })
+
+router.get("/me", verify, async (req, res) => {
+    try {
+      // request.user is getting fetched from Middleware after token authentication
+      const user = await User.findById(req.user._id);
+      res.json({"response": "success"});
+    } catch (e) {
+      res.send({ message: "Error in Fetching user" });
+    }
+});
 
 module.exports = router;
