@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
-
+const port = process.env.PORT || 5000;
 // Import Routes
 const authRoute = require('./routes/auth')
 const postRoute = require('./routes/posts')
@@ -27,4 +27,4 @@ app.get('/', function (req, res) {
   res.send('Hello World')
 })
  
-app.listen(3000)
+app.listen(port)
